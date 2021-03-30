@@ -14,10 +14,21 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Date;
 
 public class GyroscopeActivity extends AppCompatActivity implements SensorEventListener {
 
+    private SensorManager sensorManager;
+    private float velocityZ;
+    private float gradient = 0;
+    private float timestamp;
+    private static final float NS2S = 1.0f / 1000000000.0f;
+
+
     Button resetButton, randomButton;
+    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +39,7 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
 
         resetButton = findViewById(R.id.gyroscope_reset);
         randomButton = findViewById(R.id.gyroscope_random);
+        text = findViewById(R.id.textGyroscope);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,31 +55,56 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
             }
         });
 
-        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = null;
         if (sensorManager != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         }
 
-        SensorEventListener gyroscopeDetector = new SensorEventListener() {
+        SensorEventListener gyroscopeEventListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 if (sensorEvent != null) {
-                    System.out.println(": X: " + sensorEvent.values[0] + "; Y: " + sensorEvent.values[1] + "; Z: " + sensorEvent.values[2] + ";");
-                    // TODO: 3/30/2021
+                    if (timestamp == 0) {
+                        timestamp = sensorEvent.timestamp;
+                    }
+
+                    float alpha = 0.8f;
+                    velocityZ = alpha * velocityZ + (1 - alpha) * sensorEvent.values[2];
+
+                    final float dT = (sensorEvent.timestamp - timestamp) * NS2S;
+                    gradient += velocityZ * dT ;
+
+                    timestamp = sensorEvent.timestamp;
+                    System.out.println(gradient);
+
                 }
             }
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int i) {
             }
+
+
         };
         if (sensorManager != null) {
-            sensorManager.registerListener(gyroscopeDetector, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(gyroscopeEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         } else {
             System.out.println("sensorManager is null");
         }
     }
+
+    public float getGradient() {
+        return gradient;
+    }
+
+    //    @Override
+//    protected void onStop() {
+//        // Unregister the listener
+//        sensorManager.unregisterListener(this);
+//        super.onStop();
+//    }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {

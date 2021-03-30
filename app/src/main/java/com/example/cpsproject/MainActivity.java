@@ -32,8 +32,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void switchActivities(Class<?> gyroscopeActivityClass) {
-        Intent switchActivityIntent = new Intent(this, gyroscopeActivityClass);
+    private void switchActivities(Class<?> activityClass) {
+        Intent switchActivityIntent = new Intent(this, activityClass);
         startActivity(switchActivityIntent);
     }
+
+
+
+
 }
