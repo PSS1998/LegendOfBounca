@@ -31,13 +31,31 @@
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:background="@color/purple_700" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/gravity_fab"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_baseline_settings_backup_restore_24" />
+           >
+
+            <Button
+                android:id="@+id/gravity_reset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="reset" />
+
+            <Button
+                android:id="@+id/gravity_random"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="random" />
+        </LinearLayout>
 
     </LinearLayout>
 

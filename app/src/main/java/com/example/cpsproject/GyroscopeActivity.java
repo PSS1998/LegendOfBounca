@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.Button;
 
 public class GyroscopeActivity extends AppCompatActivity implements SensorEventListener {
+
+    Button resetButton, randomButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +26,22 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.gyroscope_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        resetButton = findViewById(R.id.gyroscope_reset);
+        randomButton = findViewById(R.id.gyroscope_random);
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 3/30/2021 Gyroscope reset action
-                Snackbar.make(view, "Reset Game Gyroscope", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
+        randomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 3/30/2021 Gyroscope random action
+            }
+        });
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = null;
