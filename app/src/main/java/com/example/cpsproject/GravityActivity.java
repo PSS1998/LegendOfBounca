@@ -43,6 +43,7 @@ public class GravityActivity extends AppCompatActivity {
 
     public int RIGHTEST_POSITION;
     private int BOTTOMMOST_POSITION;
+    private int TOPMOST_POSITION;
 
     private boolean gameStarted = false;
     private View movingObject;
@@ -57,7 +58,6 @@ public class GravityActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         this.movingObject = findViewById(R.id.movingObject);
-        findViewById(R.id.movingObject).setVisibility(View.INVISIBLE);
 
         resetButton = findViewById(R.id.gravity_reset);
         randomButton = findViewById(R.id.gravity_random);
@@ -73,15 +73,22 @@ public class GravityActivity extends AppCompatActivity {
                 int layoutRight = layout.getRight();
                 int layoutBottom = layout.getBottom();
 
+                View floor = findViewById(R.id.floor);
+                int floorHeight = floor.getHeight();
+
+                View toolbar = findViewById(R.id.toolbar);
+                int ceilingHeight = toolbar.getHeight();
+
                 int movingObjectWidth = movingObject.getWidth();
                 int movingObjectHeight = movingObject.getHeight();
 
                 RIGHTEST_POSITION = layoutRight - movingObjectWidth;
-                BOTTOMMOST_POSITION = layoutBottom - movingObjectHeight;
+                BOTTOMMOST_POSITION = layoutBottom - floorHeight - movingObjectHeight;
+                TOPMOST_POSITION = 0 + ceilingHeight;
 
                 Random r = new Random();
                 int i1 = r.nextInt(RIGHTEST_POSITION);
-                int i2 = r.nextInt(BOTTOMMOST_POSITION);
+                int i2 = r.nextInt(BOTTOMMOST_POSITION-TOPMOST_POSITION)+TOPMOST_POSITION;
 
                 x = i1;
                 y = i2;
@@ -144,31 +151,63 @@ public class GravityActivity extends AppCompatActivity {
 
                         if (gameStarted) {
                             final double time_slice = dT * US2S;
-                            fy = vx == 0 ? (gravityX - (gravityZ * MU_S)) : (gravityX - (gravityZ * MU_K));
-                            fx = vy == 0 ? (gravityY - (gravityZ * MU_S)) : (gravityY - (gravityZ * MU_K));
+
+                            if(vy == 0) {
+                                if(vx == 0) {
+                                    if(gravityY > (gravityX * MU_S))
+                                        fx = gravityY - (gravityX * MU_S);
+                                    else
+                                        fx = 0;
+                                }
+                                else {
+                                    if(gravityY > (gravityX * MU_K))
+                                        fx = gravityY - (gravityX * MU_K);
+                                    else
+                                        fx = 0;
+                                }
+                            }
+                            else {
+                                fx = gravityY;
+                            }
+                            if(vx == 0) {
+                                if(vy == 0) {
+                                    if(gravityX > (gravityY * MU_S))
+                                        fy = gravityX - (gravityY * MU_S);
+                                    else
+                                        fy = 0;
+                                }
+                                else {
+                                    if(gravityX > (gravityY * MU_K))
+                                        fy = gravityX - (gravityY * MU_K);
+                                    else
+                                        fy = 0;
+                                }
+                            }
+                            else {
+                                fy = gravityX;
+                            }
 
                             double ax = fx / MASS;
                             double ay = fy / MASS;
 
-
                             double newX = (0.5) * ax * Math.pow(time_slice, 2) + vx * time_slice + x;
                             double newY = (0.5) * ay * Math.pow(time_slice, 2) + vy * time_slice + y;
                             x = (newX >= RIGHTEST_POSITION) ? RIGHTEST_POSITION : (float) ((newX <= 0) ? 0 : newX);
-                            y = (newY >= BOTTOMMOST_POSITION) ? BOTTOMMOST_POSITION : (float) ((newY <= 0) ? 0 : newY);
+                            y = (newY >= BOTTOMMOST_POSITION) ? BOTTOMMOST_POSITION : (float) ((newY <= TOPMOST_POSITION) ? TOPMOST_POSITION : newY);
 
                             double newVX = ax * time_slice + vx;
                             double newVY = ay * time_slice + vy;
 
-                            if((newX >= RIGHTEST_POSITION || newX <= 0) || (newY >= BOTTOMMOST_POSITION || newY <= 0)) {
+                            if((newX >= RIGHTEST_POSITION || newX <= 0) || (newY >= BOTTOMMOST_POSITION || newY <= TOPMOST_POSITION)) {
                                 if (newX >= RIGHTEST_POSITION || newX <= 0) {
                                     vx = -newVX * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                     vy = newVY * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                 }
-                                if (newY >= BOTTOMMOST_POSITION || newY <= 0) {
+                                if (newY >= BOTTOMMOST_POSITION || newY <= TOPMOST_POSITION) {
                                     vx = newVX * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                     vy = -newVY * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                 }
-                                if((newX >= RIGHTEST_POSITION || newX <= 0) && (newY >= BOTTOMMOST_POSITION || newY <= 0)){
+                                if((newX >= RIGHTEST_POSITION || newX <= 0) && (newY >= BOTTOMMOST_POSITION || newY <= TOPMOST_POSITION)){
                                     vx = -newVX * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                     vy = -newVY * Math.sqrt(1 - DISSIPATION_COEFFICIENT);
                                 }
