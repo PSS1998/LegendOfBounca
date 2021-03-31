@@ -1,25 +1,47 @@
 package com.example.cpsproject;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.view.View;
 
-public class BallPainter {
-    private int color = Color.BLUE;
-    private final double radius;
+public class BallPainter extends View {
+    private final int color = Color.BLUE;
     private final Paint paint;
+    private final RectF ballBounds;
+    private final Ball ball;
     private final Canvas canvas;
 
-    public BallPainter(double radius) {
-        this.radius = radius;
+    public BallPainter(Context context, Ball ball) {
+        super(context);
+        this.ball = ball;
         paint = new Paint();
         paint.setColor(color);
         canvas = new Canvas();
+        ballBounds = new RectF();
+        setBackgroundColor(Color.YELLOW);
     }
 
-    public void draw(Vector position) {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        Vector position = ball.getTransform().getPosition();
         float x = (float) position.getX();
         float y = (float) position.getY();
-//        this.canvas.drawCircle((float)x, (float)y, (float)this.radius, paint);
+        float radius = (float) ball.getRadius();
+        ballBounds.set(x - radius, y - radius, x + radius, y + radius);
+        paint.setColor(color);
+        canvas.drawOval(ballBounds, paint);
+    }
+
+    public void draw() {
+        Vector position = ball.getTransform().getPosition();
+        float x = (float) position.getX();
+        float y = (float) position.getY();
+        float radius = (float) ball.getRadius();
+        ballBounds.set(x - radius, y - radius, x + radius, y + radius);
+        paint.setColor(color);
+        canvas.drawOval(ballBounds, paint);
     }
 }

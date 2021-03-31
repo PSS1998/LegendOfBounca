@@ -1,5 +1,6 @@
 package com.example.cpsproject;
 
+import android.content.Context;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -8,15 +9,15 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private double mass;
     private final Transform transform;
     private final double radius;
-    private ArrayList<Meshable> environmentObjects = new ArrayList<>();
-    private BallPainter painter;
+    private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
+    private final BallPainter painter;
     public TextView textBox;
 
-    public Ball(String name, double radius, Transform transform) {
+    public Ball(Context context, String name, double radius, Transform transform) {
         super(name);
         this.radius = radius;
         this.transform = transform;
-        this.painter = new BallPainter(radius);
+        this.painter = new BallPainter(context, this);
     }
 
     public void addEnvironment(Room room) {
@@ -54,17 +55,26 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     void update(double deltaTime) {
-//        Vector velocityChange = calculateTotalForce().multi(deltaTime);
-//        Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
-//        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
-//        this.transform.move(displacement);
-//        this.transform.setVelocity(updatedVelocity);
-//        for (Meshable meshable: environmentObjects)
-//            if (this.hasCollision(meshable)) {
-//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
-//                this.transform.getVelocity().add(interaction);
-//            }
-//        painter.draw(this.transform.getPosition());
+        Vector velocityChange = calculateTotalForce().multi(deltaTime);
+        Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
+        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
+        this.transform.move(displacement);
+        this.transform.setVelocity(updatedVelocity);
+        for (Meshable meshable: environmentObjects)
+            if (this.hasCollision(meshable)) {
+                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
+                this.transform.getVelocity().add(interaction);
+            }
+        painter.invalidate();
+        painter.draw();
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public Transform getTransform() {
+        return transform;
     }
 
     @Override

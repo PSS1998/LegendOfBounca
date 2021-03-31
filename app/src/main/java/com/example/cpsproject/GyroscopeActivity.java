@@ -20,7 +20,7 @@ import android.widget.TextView;
 import java.util.Date;
 
 public class GyroscopeActivity extends AppCompatActivity {
-    private final GameManager gameManager = new GameManager();
+    private GameManager gameManager;
     private Gyroscope gyroscope;
 
     Button resetButton;
@@ -30,6 +30,7 @@ public class GyroscopeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gameManager = new GameManager(this);
         setContentView(R.layout.activity_gyroscope);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,6 +38,9 @@ public class GyroscopeActivity extends AppCompatActivity {
         resetButton = findViewById(R.id.gyroscope_reset);
         randomButton = findViewById(R.id.gyroscope_random);
         textBox = findViewById(R.id.textGyroscope);
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        gyroscope = Gyroscope.getInstance(sensorManager);
+        gameManager.createGameObjects(textBox, gyroscope);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,22 +56,26 @@ public class GyroscopeActivity extends AppCompatActivity {
             }
         });
 
-        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        try {
-            if (sensorManager != null) {
-                gyroscope = Gyroscope.getInstance(sensorManager);
-                gameManager.createGameObjects(textBox, gyroscope);
-                gyroscope.start();
-                gameManager.textBox = textBox;
-                gameManager.run();
-            }
-        } catch (Exception e) {
-        }
     }
 
     @Override
     protected void onStop() {
         gyroscope.stop();
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        try {
+            if (sensorManager != null) {
+                gyroscope.start();
+                gameManager.textBox = textBox;
+                gameManager.start();
+            }
+        } catch (Exception e) {
+            textBox.setText(e.getMessage());
+        }
     }
 }
