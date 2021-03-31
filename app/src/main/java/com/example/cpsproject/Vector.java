@@ -1,5 +1,7 @@
 package com.example.cpsproject;
 
+import androidx.annotation.NonNull;
+
 public class Vector {
     private double x;
     private double y;
@@ -43,21 +45,21 @@ public class Vector {
 
     public Vector multi(double coefficient) {
         this.x *= coefficient;
-        this.z *= coefficient;
+        this.y *= coefficient;
         this.z *= coefficient;
         return this;
     }
 
     public Vector div(double coefficient) {
         this.x /= coefficient;
-        this.z /= coefficient;
+        this.y /= coefficient;
         this.z /= coefficient;
         return this;
     }
 
     public Vector add(Vector vector) {
         this.x += vector.x;
-        this.z += vector.y;
+        this.y += vector.y;
         this.z += vector.z;
         return this;
     }
@@ -76,6 +78,12 @@ public class Vector {
 
     public static Vector fromAbsoluteValueIn2D(double value, double angle) {
         return new Vector(Math.cos(angle), Math.sin(angle), 0).multi(value);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "X: " + this.x + ", Y: " + this.y + ", Z: " + this.z;
     }
 
     public static Vector nullVector() {

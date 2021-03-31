@@ -42,7 +42,7 @@ public class Gyroscope extends GameSensorListener {
             velocityZ = alpha * velocityZ + (1 - alpha) * event.values[2];
             gradient += velocityZ * dT;
             timestamp = event.timestamp;
-            System.out.println(gradient);
+//            System.out.println(gradient);
         }
     }
 }

@@ -17,7 +17,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         super(name);
         this.radius = radius;
         this.transform = transform;
-        this.painter = new BallPainter(context, this);
+        this.painter = new BallPainter(context);
     }
 
     public void addEnvironment(Room room) {
@@ -50,7 +50,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     }
 
     private Vector calculateTotalForce() {
-        return Vector.nullVector();
+        return new Vector(0, 100, 0);
+//        return Vector.nullVector();
     }
 
     @Override
@@ -65,8 +66,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
                 this.transform.getVelocity().add(interaction);
             }
-        painter.invalidate();
-        painter.draw();
+        System.out.println(this.transform.getPosition());
+        painter.draw(this.transform.getPosition());
     }
 
     public double getRadius() {

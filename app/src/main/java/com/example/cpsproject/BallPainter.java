@@ -1,47 +1,20 @@
 package com.example.cpsproject;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.view.View;
+import android.widget.ImageView;
 
 public class BallPainter extends View {
-    private final int color = Color.BLUE;
-    private final Paint paint;
-    private final RectF ballBounds;
-    private final Ball ball;
-    private final Canvas canvas;
+    private ImageView ball;
 
-    public BallPainter(Context context, Ball ball) {
+    public BallPainter(Context context) {
         super(context);
-        this.ball = ball;
-        paint = new Paint();
-        paint.setColor(color);
-        canvas = new Canvas();
-        ballBounds = new RectF();
-        setBackgroundColor(Color.YELLOW);
+        ball = GyroscopeActivity.getBall();
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        Vector position = ball.getTransform().getPosition();
-        float x = (float) position.getX();
-        float y = (float) position.getY();
-        float radius = (float) ball.getRadius();
-        ballBounds.set(x - radius, y - radius, x + radius, y + radius);
-        paint.setColor(color);
-        canvas.drawOval(ballBounds, paint);
-    }
-
-    public void draw() {
-        Vector position = ball.getTransform().getPosition();
-        float x = (float) position.getX();
-        float y = (float) position.getY();
-        float radius = (float) ball.getRadius();
-        ballBounds.set(x - radius, y - radius, x + radius, y + radius);
-        paint.setColor(color);
-        canvas.drawOval(ballBounds, paint);
+    public void draw(Vector position) {
+        System.out.println(ball.getX() + " " + ball.getY());
+        ball.setX((float) position.getX());
+        ball.setY((float) position.getY());
     }
 }

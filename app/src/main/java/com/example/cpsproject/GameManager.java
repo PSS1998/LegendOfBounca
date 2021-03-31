@@ -36,26 +36,27 @@ public class GameManager extends Thread {
     public void run() {
         firstTime = System.nanoTime();
         String message = new String();
-        while(counter < 4) {
+        while(counter < 3 && parallelCounter < 100) {
             try {
                 synchronized (this) {
                     parallelCounter++;
                     long currentTime = System.nanoTime();
                     if (lastUpdateTime == 0)
                         lastUpdateTime = currentTime;
-                    if ((currentTime - lastUpdateTime) / 1000000 < GameManager.DELTA_TIME)
-                        Thread.sleep((currentTime - lastUpdateTime) / 1000000);
+                    double delta = currentTime - lastUpdateTime;
+                    System.out.println(delta);
+                    if (delta / 1000000 < GameManager.DELTA_TIME)
+                        Thread.sleep(DELTA_TIME - (long) (delta / 1000000));
                     else {
                         counter++;
-                        double delta = 0.1;
                         for (GameObject gameObject : this.gameObjects)
-                            gameObject.update(delta);
+                            gameObject.update(delta / 1000000000.0);
                         lastUpdateTime = currentTime;
                     }
                 }
             } catch (Exception e) {
+                message = message.concat("error:\n");
                 message = message.concat(e.getMessage());
-                message = message.concat("error\n");
                 break;
 //                break;
 //                textBox.setText(e.getMessage());

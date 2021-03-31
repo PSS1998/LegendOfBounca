@@ -1,23 +1,16 @@
 package com.example.cpsproject;
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
+import android.annotation.SuppressLint;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.service.autofill.CharSequenceTransformation;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.Date;
 
 public class GyroscopeActivity extends AppCompatActivity {
     private GameManager gameManager;
@@ -25,6 +18,8 @@ public class GyroscopeActivity extends AppCompatActivity {
 
     Button resetButton;
     Button randomButton;
+    @SuppressLint("StaticFieldLeak")
+    static private ImageView ball;
     private TextView textBox;
 
     @Override
@@ -40,6 +35,9 @@ public class GyroscopeActivity extends AppCompatActivity {
         textBox = findViewById(R.id.textGyroscope);
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscope = Gyroscope.getInstance(sensorManager);
+        ball = (ImageView) findViewById(R.id.ball_objects2);
+        if (ball == null)
+            System.out.println("kheili khari");
         gameManager.createGameObjects(textBox, gyroscope);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -77,5 +75,9 @@ public class GyroscopeActivity extends AppCompatActivity {
         } catch (Exception e) {
             textBox.setText(e.getMessage());
         }
+    }
+
+    static public ImageView getBall() {
+        return ball;
     }
 }
