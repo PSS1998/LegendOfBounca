@@ -12,6 +12,7 @@
         <activity android:name=".GravityActivity"
             android:label="@string/title_activity_gravity"
             android:theme="@style/Theme.CpsProject.NoActionBar"
+            android:screenOrientation="landscape"
             />
         <activity
             android:name=".GyroscopeActivity"
