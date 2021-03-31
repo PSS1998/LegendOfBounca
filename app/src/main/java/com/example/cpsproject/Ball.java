@@ -1,5 +1,7 @@
 package com.example.cpsproject;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
@@ -8,6 +10,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final double radius;
     private ArrayList<Meshable> environmentObjects = new ArrayList<>();
     private BallPainter painter;
+    public TextView textBox;
 
     public Ball(String name, double radius, Transform transform) {
         super(name);
@@ -32,16 +35,17 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     public boolean hasCollision(Meshable object) {
-        if (object instanceof Room) {
-            Vector position = transform.getPosition();
-            Frame frame = ((Room) object).getFrame();
-            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
-            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
-            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
-            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
-            return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
-        }
         return false;
+//        if (object instanceof Room) {
+//            Vector position = transform.getPosition();
+//            Frame frame = ((Room) object).getFrame();
+//            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
+//            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
+//            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
+//            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+//            return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
+//        }
+//        return false;
     }
 
     private Vector calculateTotalForce() {
@@ -50,17 +54,17 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     void update(double deltaTime) {
-        Vector velocityChange = calculateTotalForce().multi(deltaTime);
-        Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
-        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
-        this.transform.move(displacement);
-        this.transform.setVelocity(updatedVelocity);
-        for (Meshable meshable: environmentObjects)
-            if (this.hasCollision(meshable)) {
-                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
-                this.transform.getVelocity().add(interaction);
-            }
-        painter.draw(this.transform.getPosition());
+//        Vector velocityChange = calculateTotalForce().multi(deltaTime);
+//        Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
+//        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
+//        this.transform.move(displacement);
+//        this.transform.setVelocity(updatedVelocity);
+//        for (Meshable meshable: environmentObjects)
+//            if (this.hasCollision(meshable)) {
+//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
+//                this.transform.getVelocity().add(interaction);
+//            }
+//        painter.draw(this.transform.getPosition());
     }
 
     @Override

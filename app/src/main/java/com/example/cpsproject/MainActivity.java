@@ -9,7 +9,9 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button switchToGyroscopeActivity, switchToGravityActivity;
+    private Button switchToGyroscopeActivity;
+    private Button switchToGravityActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

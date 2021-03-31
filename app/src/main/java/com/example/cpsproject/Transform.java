@@ -3,20 +3,16 @@ package com.example.cpsproject;
 public class Transform {
     private Vector position;
     private Vector velocity;
-    private Vector acceleration;
 
-    public Transform (Vector position, Vector velocity, Vector acceleration) {
-        this.acceleration = acceleration;
-        this.velocity = velocity;
+    public Transform (Vector position, Vector velocity) {
         this.position = position;
+        this.velocity = velocity;
     }
 
     public Transform () {
-        this.acceleration = new Vector(0,0,0);
         this.velocity = new Vector(0,0,0);
         this.position = new Vector(0,0,0);
     }
-
 
     public Vector getPosition() {
         return position;
@@ -24,10 +20,6 @@ public class Transform {
 
     public Vector getVelocity() {
         return velocity;
-    }
-
-    public Vector getAcceleration() {
-        return acceleration;
     }
 
     public void setPosition(Vector position) {
@@ -38,12 +30,7 @@ public class Transform {
         this.velocity = velocity;
     }
 
-    public void setAcceleration(Vector acceleration) {
-        this.acceleration = acceleration;
-    }
-
     public void move(Vector displacement) {
         this.position.add(displacement);
     }
-
 }

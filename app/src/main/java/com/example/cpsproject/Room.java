@@ -1,10 +1,14 @@
 package com.example.cpsproject;
 
+import android.widget.TextView;
+
 public class Room extends GameObject implements FrictionalSurface {
     private double STATIC_FRICTION_CONSTANT = 0.15f;
     private double DYNAMIC_FRICTION_CONSTANT = 0.07f;
     private Frame frame;
     private GameSensorListener sensorListener;
+    public TextView textBox;
+    int counter = 0;
 
     public Room(String name, int width, int height, GameSensorListener sensorListener) {
         super(name);
@@ -28,6 +32,8 @@ public class Room extends GameObject implements FrictionalSurface {
 
     @Override
     void update(double deltaTime) {
-        this.frame.setTheta(sensorListener.getGradient());
+//        textBox.setText(new String("Iman update"));
+//                  .concat(String.valueOf(this.frame.getTheta())));
+//        this.frame.setTheta(sensorListener.getGradient());
     }
 }

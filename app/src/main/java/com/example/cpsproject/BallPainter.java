@@ -20,6 +20,6 @@ public class BallPainter {
     public void draw(Vector position) {
         float x = (float) position.getX();
         float y = (float) position.getY();
-        this.canvas.drawCircle((float)x, (float)y, (float)this.radius, paint);
+//        this.canvas.drawCircle((float)x, (float)y, (float)this.radius, paint);
     }
 }
