@@ -37,7 +37,7 @@ public class GameManager extends Thread {
     public void run() {
         firstTime = System.nanoTime();
         String message = new String();
-        while(counter < 5000) {
+        while(true) {
             try {
                 long currentTime = System.nanoTime();
                 if (lastUpdateTime == 0)
@@ -67,9 +67,10 @@ public class GameManager extends Thread {
     }
 
     public void setRandomBallPosition() {
+        System.out.println("frame height :"  + frame.getHeight() + " width:" + frame.getWidth());
         Vector position = new Vector();
         position.setX((0 / 3.5 + 0.30) * frame.getWidth());
-        position.setY((0 / 3.5 + 0.30) * frame.getHeight());
+        position.setY((1) * frame.getHeight() - 150);
         this.ball.getTransform().setPosition(position);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getPosition());

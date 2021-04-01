@@ -28,13 +28,7 @@ public class Gyroscope extends GameSensorListener {
     }
 
     public double getGradient() {
-        if (Math.abs(gradient) > Math.PI/2.0)
-            System.out.println("error gradient");
-
-
-        if (gradient < 0)
-            return Math.PI + gradient;
-        return gradient;
+        return Math.PI / 4;
     }
 
     @Override

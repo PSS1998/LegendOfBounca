@@ -7,8 +7,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
-    private final static float DISSIPATION_COEFFICIENT = 0.1f;
-    private double mass = 0.01;
+    private final static float DISSIPATION_COEFFICIENT = 0;
+    private double mass = 1;
     private final Transform transform;
     private final double radius;
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
@@ -50,8 +50,9 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
-//            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return distanceFromDownSide <= radius || distanceFromUpSide <= radius || distanceFromRightSide <= radius || distanceFromLeftSide <= radius;
+            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
+            return (distanceFromDownSide <= radius && this.getTransform().getVelocity().getY() > 0) || (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < 0)  ||
+                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > 0) || (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < 0 );
         }
         return false;
     }
@@ -77,11 +78,11 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     }
 
     private Vector calculateTotalForce() {
-        return physicsRules.calculateFreeFallForce(this, room.getFrame()) ;
+//        return physicsRules.calculateFreeFallForce(this, room.getFrame());
 //        if (state == 0)
 //            return new Vector(0, 300, 0).multi(mass);
 //        else if (state == 1)
-//            return new Vector(250, 0, 0);
+            return new Vector(250, 0, 0);
 //        else if (state == 2)
 //            return new Vector(0, -200, 0);
 //        return new Vector(-300, 0, 0);
@@ -120,7 +121,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         if (collision == Collision.DOWN)
             position.setY(height - this.radius);
         if (collision == Collision.UP)
-            position.setY(this.radius);
+            position.setY(this.radius + GyroscopeActivity.p);
         if (collision == Collision.RIGHT)
             position.setX(width - this.radius);
         if (collision == Collision.LEFT)

@@ -53,19 +53,16 @@ public class Frame implements Inclinable, Meshable {
 
     @Override
     public Vector getVectorOfInteractionCollision(Transform transform, Collision collision) {
-        double absoluteVelocity = transform.getVelocity().getAbsoluteValue();
-        double velocityAngle = transform.getVelocity().getThetaIn2D();
-        float differenceAngle = (float)(Math.PI / 2 - (velocityAngle - this.theta));
-        return transform.getVelocity().multi(-1).rotate2D(differenceAngle);
-//        if (collision == Collision.DOWN)
-//            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta), theta + Math.PI / 2);
+
+        if (collision == Collision.DOWN || collision == Collision.UP)
+            return new Vector(transform.getVelocity().getX(), -transform.getVelocity().getY(), 0);
 //        if (collision == Collision.UP)
 //            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI), theta + Math.PI * 1.5);
-//        if (collision == Collision.RIGHT)
-//            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta + Math.PI / 2), theta);
+        if (collision == Collision.RIGHT || collision == Collision.LEFT)
+            return new Vector(-transform.getVelocity().getX(), transform.getVelocity().getY(), 0);
 //        if (collision == Collision.LEFT)
 //            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI / 2), theta + Math.PI);
-//        return new Vector();
+        return new Vector();
     }
 
     @Override

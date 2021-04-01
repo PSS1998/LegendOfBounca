@@ -78,10 +78,10 @@ public class GyroscopeActivity extends AppCompatActivity {
                     w = layoutRight;
                     h = layoutBottom - floorHeight;
                     p = ceilingHeight;
-                    gameManager.createGameObjects(textBox, gravity);
+                    gameManager.createGameObjects(textBox, gyroscope);
                     gameManager.start();
                     gyroscope.start();
-                    gravity.start();
+                    //gravity.start();
                     resetButton.setText("Restart");
                     isStarted = true;
                 } else {

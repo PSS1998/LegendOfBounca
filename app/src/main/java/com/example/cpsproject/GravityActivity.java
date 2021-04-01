@@ -268,6 +268,8 @@ public class GravityActivity extends AppCompatActivity {
         BOTTOMMOST_POSITION = BOTTOMMOST_POSITION/SPEED_MULTIPLIER_CONSTANT;
         TOPMOST_POSITION = TOPMOST_POSITION/SPEED_MULTIPLIER_CONSTANT;
 
+        System.out.println("size of frame r:" + RIGHTEST_POSITION + " b:" + BOTTOMMOST_POSITION);
+
         Random r = new Random();
         int i1 = r.nextInt(RIGHTEST_POSITION-2)+1;
         int i2 = r.nextInt(BOTTOMMOST_POSITION-TOPMOST_POSITION-2)+TOPMOST_POSITION+1;
