@@ -75,22 +75,21 @@ public class GyroscopeActivity extends AppCompatActivity {
                     w = layoutRight;
                     h = layoutBottom - floorHeight;
                     p = ceilingHeight;
-
                     gameManager.createGameObjects(textBox, gyroscope);
                     gameManager.start();
+//                    gyroscope.start();
                     resetButton.setText("Restart");
                     isStarted = true;
                 } else {
                     gameManager.setRandomBallPosition();
                 }
-                // TODO: 3/30/2021 Gyroscope reset action
             }
         });
 
         randomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 3/30/2021 Gyroscope random action
+                gameManager.setRandomBallVelocity();
             }
         });
 
@@ -108,9 +107,7 @@ public class GyroscopeActivity extends AppCompatActivity {
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         try {
             if (sensorManager != null) {
-//                gyroscope.start();
                 gameManager.textBox = textBox;
-//                gameManager.start();
             }
         } catch (Exception e) {
             textBox.setText(e.getMessage());

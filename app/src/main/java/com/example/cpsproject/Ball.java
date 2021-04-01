@@ -14,7 +14,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
     private final BallPainter painter;
     public TextView textBox;
-    static int state = 0;
+    static int state = 2;
     boolean stop = false;
 
     public Ball(String name, double radius, Transform transform) {
@@ -48,19 +48,38 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
+            return distanceFromDownSide <= radius || distanceFromUpSide <= radius || distanceFromRightSide <= radius || distanceFromLeftSide <= radius;
         }
         return false;
+    }
+
+    private Collision detectCollision(Meshable object) {
+        if (object instanceof Frame) {
+            Vector position = transform.getPosition();
+            Frame frame = (Frame) object;
+            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
+            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
+            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
+            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+            if (distanceFromDownSide <= radius)
+                return Collision.DOWN;
+            if (distanceFromUpSide <= radius)
+                return Collision.UP;
+            if (distanceFromRightSide <= radius)
+                return Collision.RIGHT;
+            return Collision.LEFT;
+        }
+        return null;
     }
 
     private Vector calculateTotalForce() {
         if (state == 0)
             return new Vector(0, 300, 0);
         else if (state == 1)
-            return new Vector(20, 0, 0);
+            return new Vector(250, 0, 0);
         else if (state == 2)
-            return new Vector(0, -20, 0);
-        return new Vector(-20, 0, 0);
+            return new Vector(0, -200, 0);
+        return new Vector(-300, 0, 0);
 //        return Vector.nullVector();
     }
 
@@ -73,7 +92,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         this.transform.setVelocity(updatedVelocity);
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
-                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
+                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, detectCollision(meshable));
                 System.out.println("interaction: " + interaction);
                 this.transform.getVelocity().add(interaction);
                 this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));

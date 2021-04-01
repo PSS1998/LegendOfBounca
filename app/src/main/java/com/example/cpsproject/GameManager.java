@@ -65,6 +65,7 @@ public class GameManager extends Thread {
         textBox.setText(message);
 
     }
+
     public void setRandomBallPosition() {
         Vector position = new Vector();
         position.setX((Math.random() / 3.5 + 0.30) * frame.getWidth());
@@ -72,5 +73,8 @@ public class GameManager extends Thread {
         this.ball.getTransform().setPosition(position);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getPosition());
+    }
+
+    public void setRandomBallVelocity() {
     }
 }

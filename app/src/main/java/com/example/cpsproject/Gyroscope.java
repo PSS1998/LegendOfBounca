@@ -34,15 +34,14 @@ public class Gyroscope extends GameSensorListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event != null) {
-            if (timestamp == 0) {
+            if (timestamp == 0)
                 timestamp = event.timestamp;
-            }
             double alpha = 0.8;
             final double dT = (event.timestamp - timestamp) * NS2S;
             velocityZ = alpha * velocityZ + (1 - alpha) * event.values[2];
             gradient += velocityZ * dT;
             timestamp = event.timestamp;
-//            System.out.println(gradient);
+            System.out.println("gradient: " + gradient);
         }
     }
 }

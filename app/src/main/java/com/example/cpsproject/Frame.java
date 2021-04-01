@@ -55,12 +55,14 @@ public class Frame implements Inclinable, Meshable {
     public Vector getVectorOfInteractionCollision(Transform transform, Collision collision) {
         double absoluteVelocity = transform.getVelocity().getAbsoluteValue();
         double velocityAngle = transform.getVelocity().getThetaIn2D();
-        if (collision == Collision.DOWN || collision == Collision.UP) {
+        if (collision == Collision.DOWN)
             return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta), theta + Math.PI / 2);
-        }
-        if (collision == Collision.RIGHT || collision == Collision.LEFT) {
-            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta), theta + Math.PI / 2);
-        }
+        if (collision == Collision.UP)
+            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI), theta + Math.PI * 1.5);
+        if (collision == Collision.RIGHT)
+            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta + Math.PI / 2), theta);
+        if (collision == Collision.LEFT)
+            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI / 2), theta + Math.PI);
         return new Vector();
     }
 
