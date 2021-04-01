@@ -33,7 +33,7 @@ public class GyroscopeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gameManager = new GameManager(this);
+        gameManager = new GameManager();
         setContentView(R.layout.activity_gyroscope);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,25 +59,30 @@ public class GyroscopeActivity extends AppCompatActivity {
 
 
         resetButton.setOnClickListener(new View.OnClickListener() {
+            boolean isStarted = false;
             @Override
             public void onClick(View view) {
-                View layout = findViewById(R.id.main_layout);
-                int layoutRight = layout.getRight();
-                int layoutBottom = layout.getBottom();
+                if (!isStarted) {
+                    View layout = findViewById(R.id.main_layout);
+                    int layoutRight = layout.getRight();
+                    int layoutBottom = layout.getBottom();
 
-                View floor = findViewById(R.id.floor);
-                int floorHeight = floor.getHeight();
+                    View floor = findViewById(R.id.floor);
+                    int floorHeight = floor.getHeight();
 
-                int ceilingHeight = toolbar.getHeight();
+                    int ceilingHeight = toolbar.getHeight();
 
-                w = layoutRight;
-                h = layoutBottom - floorHeight;
-                p = ceilingHeight;
+                    w = layoutRight;
+                    h = layoutBottom - floorHeight;
+                    p = ceilingHeight;
 
-                gameManager.createGameObjects(textBox, gyroscope);
-                gameManager.start();
-
-
+                    gameManager.createGameObjects(textBox, gyroscope);
+                    gameManager.start();
+                    resetButton.setText("Restart");
+                    isStarted = true;
+                } else {
+                    gameManager.setRandomBallPosition();
+                }
                 // TODO: 3/30/2021 Gyroscope reset action
             }
         });

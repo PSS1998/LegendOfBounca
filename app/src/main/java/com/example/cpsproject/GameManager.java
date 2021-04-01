@@ -14,24 +14,20 @@ public class GameManager extends Thread {
     public TextView textBox;
     public long lastUpdateTime;
     public long firstTime;
-    private final Context context;
-
-    public GameManager(Context context) {
-        this.context = context;
-    }
+    private Ball ball;
+    private Room room;
+    private View frame;
 
     public void createGameObjects(TextView viewBox, GameSensorListener sensorListener) {
-        View frame = GyroscopeActivity.getFrame();
+        this.frame = GyroscopeActivity.getFrame();
         textBox = viewBox;
-        Vector position = new Vector();
-        position.setX((Math.random() / 3.5 + 0.30) * frame.getWidth());
-        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
         float radius = GyroscopeActivity.getBall().getHeight() / 2.0f;
         System.out.println("radius: " + radius);
-        Ball ball = new Ball("ball", 150, new Transform(position, Vector.nullVector()));
+        this.ball = new Ball("ball", 150, new Transform());
+        this.setRandomBallPosition();
         gameObjects.add(ball);
         ball.textBox = textBox;
-        Room room = new Room("room", frame.getWidth(), frame.getHeight(), sensorListener);
+        this.room = new Room("room", frame.getWidth(), frame.getHeight(), sensorListener);
         room.textBox = viewBox;
         gameObjects.add(room);
         ball.addEnvironment(room);
@@ -68,5 +64,13 @@ public class GameManager extends Thread {
         message = message.concat("\ncounter: " + counter);
         textBox.setText(message);
 
+    }
+    public void setRandomBallPosition() {
+        Vector position = new Vector();
+        position.setX((Math.random() / 3.5 + 0.30) * frame.getWidth());
+        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
+        this.ball.getTransform().setPosition(position);
+        System.out.println("iman");
+        System.out.println(this.ball.getTransform().getPosition());
     }
 }

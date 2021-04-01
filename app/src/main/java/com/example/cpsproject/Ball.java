@@ -55,7 +55,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     private Vector calculateTotalForce() {
         if (state == 0)
-            return new Vector(0, 20, 0);
+            return new Vector(0, 300, 0);
         else if (state == 1)
             return new Vector(20, 0, 0);
         else if (state == 2)
@@ -68,9 +68,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     void update(double deltaTime) {
         Vector velocityChange = calculateTotalForce().multi(deltaTime);
         Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
-        Vector displacement =
-//                new Vector(0, 3, 0);
-                Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
+        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
         this.transform.move(displacement);
         this.transform.setVelocity(updatedVelocity);
         for (Meshable meshable: environmentObjects)
@@ -78,9 +76,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
                 System.out.println("interaction: " + interaction);
                 this.transform.getVelocity().add(interaction);
-                this.transform.getVelocity().multi(Math.sqrt(DISSIPATION_COEFFICIENT));
+                this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));
             }
-//        System.out.println(this.transform.getPosition());
         painter.draw(this.transform.getPosition());
     }
 
@@ -100,6 +97,10 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     @Override
     public void move(Vector position) {
         this.transform.setPosition(position);
+    }
+
+    public void setRandomPosition() {
+
     }
 }
 
