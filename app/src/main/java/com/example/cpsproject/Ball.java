@@ -1,6 +1,7 @@
 package com.example.cpsproject;
 
 import android.content.Context;
+import android.system.ErrnoException;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,12 +13,13 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
     private final BallPainter painter;
     public TextView textBox;
+    static int state = 0;
 
-    public Ball(Context context, String name, double radius, Transform transform) {
+    public Ball(String name, double radius, Transform transform) {
         super(name);
         this.radius = radius;
         this.transform = transform;
-        this.painter = new BallPainter(context);
+        this.painter = new BallPainter();
     }
 
     public void addEnvironment(Room room) {
@@ -36,21 +38,26 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     public boolean hasCollision(Meshable object) {
+        if (object instanceof Room) {
+            Vector position = transform.getPosition();
+            Frame frame = ((Room) object).getFrame();
+            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
+            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
+            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
+            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+            return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
+        }
         return false;
-//        if (object instanceof Room) {
-//            Vector position = transform.getPosition();
-//            Frame frame = ((Room) object).getFrame();
-//            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
-//            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
-//            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
-//            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
-//            return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
-//        }
-//        return false;
     }
 
     private Vector calculateTotalForce() {
-        return new Vector(0, 100, 0);
+        if (state == 0)
+            return new Vector(0, 10, 0);
+        else if (state == 1)
+            return new Vector(10, 0, 0);
+        else if (state == 2)
+            return new Vector(0, -3, 0);
+        return new Vector(-10, 0, 0);
 //        return Vector.nullVector();
     }
 
@@ -63,8 +70,11 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         this.transform.setVelocity(updatedVelocity);
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
-                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
-                this.transform.getVelocity().add(interaction);
+                state++;
+                throw new Error("errore dige baba" + state + "\n");
+//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
+//                this.transform.getVelocity().add(interaction);
+//                this.transform.getVelocity().multi(1);
             }
         System.out.println(this.transform.getPosition());
         painter.draw(this.transform.getPosition());

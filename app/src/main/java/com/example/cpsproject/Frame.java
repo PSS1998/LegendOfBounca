@@ -48,6 +48,7 @@ public class Frame implements Inclinable, Meshable {
         return false;
     }
 
+    @Override
     public Vector getVectorOfInteractionCollision(Transform transform, Collision collision) {
         double absoluteVelocity = transform.getVelocity().getAbsoluteValue();
         double velocityAngle = transform.getVelocity().getThetaIn2D();

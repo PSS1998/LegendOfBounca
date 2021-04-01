@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".GyroscopeActivity">
 
+    <LinearLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="618dp"
+        android:layout_marginBottom="52dp"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center">
+
+    </LinearLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +87,7 @@
             app:layout_constraintVertical_bias="0.91" />
 
         <ImageView
-            android:id="@+id/ball_objects2"
+            android:id="@+id/ball_object"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="282dp"

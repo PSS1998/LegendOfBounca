@@ -4,16 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-public class BallPainter extends View {
-    private ImageView ball;
+public class BallPainter {
+    private final ImageView ball;
 
-    public BallPainter(Context context) {
-        super(context);
+    public BallPainter() {
         ball = GyroscopeActivity.getBall();
     }
 
     public void draw(Vector position) {
-        System.out.println(ball.getX() + " " + ball.getY());
         ball.setX((float) position.getX());
         ball.setY((float) position.getY());
     }

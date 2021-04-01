@@ -83,7 +83,7 @@ public class Vector {
     @NonNull
     @Override
     public String toString() {
-        return "X: " + this.x + ", Y: " + this.y + ", Z: " + this.z;
+        return "Vector: {X: " + this.x + ", Y: " + this.y + ", Z: " + this.z + "}";
     }
 
     public static Vector nullVector() {
