@@ -28,7 +28,7 @@ public class GravityActivity extends AppCompatActivity {
     public static float NS2US = 1.0f / 1000.0f; // ns to microsecond
     public static float US2S = 1.0f / 1000000.0f; // microsecond to second
     public static int READ_SENSOR_RATE = 20; // sensor read rate in microsecond
-    public static int REFRESH_VIEW_RATE = 2000; // refresh View rate in microsecond
+    public static int REFRESH_VIEW_RATE = 20000; // refresh View rate in microsecond
 
     private float readSensorTimestamp = 0;
     private float refreshViewTimestamp = 0;
@@ -66,7 +66,7 @@ public class GravityActivity extends AppCompatActivity {
         resetButton.setOnClickListener(view -> resetGame());
         randomButton.setOnClickListener(view -> randomVelocity());
 
-        
+
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = null;
         if (sensorManager != null) {
@@ -202,45 +202,41 @@ public class GravityActivity extends AppCompatActivity {
         double newGravityY;
         double newGravityX;
 
-        if((y == BOTTOMMOST_POSITION) || (y == TOPMOST_POSITION) || (x == 0) || (x == RIGHTEST_POSITION)) {
-            if (vy == 0) {
-                if (vx == 0) {
-                    if (Math.abs(gravityY) > Math.abs(gravityX * MU_S)) {
-                        newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_S);
-                        fx = (gravityY > 0) ? newGravityY : -newGravityY;
+        if((vy == 0) && ((y == BOTTOMMOST_POSITION) || (y == TOPMOST_POSITION) || (x == 0) || (x == RIGHTEST_POSITION))) {
+            if (vx == 0) {
+                if (Math.abs(gravityY) > Math.abs(gravityX * MU_S)) {
+                    newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_S);
+                    fx = (gravityY > 0) ? newGravityY : -newGravityY;
 //                        System.out.println("Static Friction: fy: " + fy + "; gravityX: " + gravityX);
-                    } else
-                        fx = 0;
-                } else {
-                    if (Math.abs(gravityY) > Math.abs(gravityX * MU_K)) {
-                        newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_K);
-                        fx = (gravityY > 0) ? newGravityY : -newGravityY;
+                } else
+                    fx = 0;
+            } else {
+                if (Math.abs(gravityY) > Math.abs(gravityX * MU_K)) {
+                    newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_K);
+                    fx = (gravityY > 0) ? newGravityY : -newGravityY;
 //                        System.out.println("Dynamic Friction: fy: " + fy + "; gravityX: " + gravityX);
-                    } else
-                        fx = 0;
-                }
+                } else
+                    fx = 0;
             }
         }
         else {
             fx = gravityY;
         }
-        if((y == BOTTOMMOST_POSITION) || (y == TOPMOST_POSITION) || (x == 0) || (x == RIGHTEST_POSITION)) {
-            if (vx == 0) {
-                if (vy == 0) {
-                    if (Math.abs(gravityX) > Math.abs(gravityY * MU_S)) {
-                        newGravityX = Math.abs(gravityX) - Math.abs(gravityX * MU_S);
-                        fy = (gravityX > 0) ? newGravityX : -newGravityX;
+        if((vx == 0) && ((y == BOTTOMMOST_POSITION) || (y == TOPMOST_POSITION) || (x == 0) || (x == RIGHTEST_POSITION))) {
+            if (vy == 0) {
+                if (Math.abs(gravityX) > Math.abs(gravityY * MU_S)) {
+                    newGravityX = Math.abs(gravityX) - Math.abs(gravityX * MU_S);
+                    fy = (gravityX > 0) ? newGravityX : -newGravityX;
 //                        System.out.println("Static Friction: fy: " + fy + "; gravityX: " + gravityX);
-                    } else
-                        fy = 0;
-                } else {
-                    if (Math.abs(gravityX) > Math.abs(gravityY * MU_K)) {
-                        newGravityX = Math.abs(gravityX) - Math.abs(gravityX * MU_K);
-                        fy = (gravityX > 0) ? newGravityX : -newGravityX;
+                } else
+                    fy = 0;
+            } else {
+                if (Math.abs(gravityX) > Math.abs(gravityY * MU_K)) {
+                    newGravityX = Math.abs(gravityX) - Math.abs(gravityX * MU_K);
+                    fy = (gravityX > 0) ? newGravityX : -newGravityX;
 //                        System.out.println("Dynamic Friction: fy: " + fy + "; gravityX: " + gravityX);
-                    } else
-                        fy = 0;
-                }
+                } else
+                    fy = 0;
             }
         }
         else {
