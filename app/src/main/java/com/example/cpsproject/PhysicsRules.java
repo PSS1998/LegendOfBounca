@@ -4,10 +4,10 @@ import android.view.ContextMenu;
 import android.view.Surface;
 
 public class PhysicsRules {
-    public Vector calculateFreeFallForce(Weighable object) {
+    public Vector calculateFreeFallForce(Weighable object, Inclinable inclinedSurface) {
         Vector accelerationGravity = new Vector(0, PhysicsConstants.g, 0);
         double weight = object.getWeight();
-        return accelerationGravity.multi(weight);
+        return accelerationGravity.multi(weight).rotate2D((float)inclinedSurface.getTheta());
     }
 
     private double getStaticFrictionConstant(Inclinable inclinedSurface) {

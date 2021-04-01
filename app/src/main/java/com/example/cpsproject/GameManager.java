@@ -68,8 +68,8 @@ public class GameManager extends Thread {
 
     public void setRandomBallPosition() {
         Vector position = new Vector();
-        position.setX((Math.random() / 3.5 + 0.30) * frame.getWidth());
-        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
+        position.setX((0 / 3.5 + 0.30) * frame.getWidth());
+        position.setY((0 / 3.5 + 0.30) * frame.getHeight());
         this.ball.getTransform().setPosition(position);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getPosition());

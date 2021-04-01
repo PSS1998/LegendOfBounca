@@ -77,7 +77,7 @@ public class GyroscopeActivity extends AppCompatActivity {
                     p = ceilingHeight;
                     gameManager.createGameObjects(textBox, gyroscope);
                     gameManager.start();
-//                    gyroscope.start();
+                    gyroscope.start();
                     resetButton.setText("Restart");
                     isStarted = true;
                 } else {

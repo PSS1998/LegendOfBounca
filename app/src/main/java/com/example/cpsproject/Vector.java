@@ -80,6 +80,10 @@ public class Vector {
         return new Vector(Math.cos(angle), Math.sin(angle), 0).multi(value);
     }
 
+    public Vector rotate2D(float theta) {
+        return new Vector(this.x * Math.cos(theta) - this.y * Math.sin(theta) , this.y * Math.cos(theta) + this.x * Math.sin(theta), 0);
+    }
+
     @NonNull
     @Override
     public String toString() {
