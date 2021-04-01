@@ -7,6 +7,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
+    private final static float DISSIPATION_COEFFICIENT = 0.1f;
     private double mass;
     private final Transform transform;
     private final double radius;
@@ -54,30 +55,30 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     private Vector calculateTotalForce() {
         if (state == 0)
-            return new Vector(0, 10, 0);
+            return new Vector(0, 20, 0);
         else if (state == 1)
-            return new Vector(10, 0, 0);
+            return new Vector(20, 0, 0);
         else if (state == 2)
-            return new Vector(0, -3, 0);
-        return new Vector(-10, 0, 0);
+            return new Vector(0, -20, 0);
+        return new Vector(-20, 0, 0);
 //        return Vector.nullVector();
     }
 
     @Override
     void update(double deltaTime) {
-        if (stop)
-            return;
         Vector velocityChange = calculateTotalForce().multi(deltaTime);
         Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
-        Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
+        Vector displacement =
+//                new Vector(0, 3, 0);
+                Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
         this.transform.move(displacement);
         this.transform.setVelocity(updatedVelocity);
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
-                stop = true;
-//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
-//                this.transform.getVelocity().add(interaction);
-//                this.transform.getVelocity().multi(1);
+                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
+                System.out.println("interaction: " + interaction);
+                this.transform.getVelocity().add(interaction);
+                this.transform.getVelocity().multi(Math.sqrt(DISSIPATION_COEFFICIENT));
             }
 //        System.out.println(this.transform.getPosition());
         painter.draw(this.transform.getPosition());

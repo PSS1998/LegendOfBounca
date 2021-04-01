@@ -24,10 +24,11 @@ public class GameManager extends Thread {
         View frame = GyroscopeActivity.getFrame();
         textBox = viewBox;
         Vector position = new Vector();
-        position.setX((Math.random() / 2.5 + 0.20) * frame.getWidth());
-        position.setY((Math.random() / 2.5 + 0.20) * frame.getHeight());
-//        System.out.println(position);
-        Ball ball = new Ball("ball", 200, new Transform(position, Vector.nullVector()));
+        position.setX((Math.random() / 3.5 + 0.30) * frame.getWidth());
+        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
+        float radius = GyroscopeActivity.getBall().getHeight() / 2.0f;
+        System.out.println("radius: " + radius);
+        Ball ball = new Ball("ball", 150, new Transform(position, Vector.nullVector()));
         gameObjects.add(ball);
         ball.textBox = textBox;
         Room room = new Room("room", frame.getWidth(), frame.getHeight(), sensorListener);

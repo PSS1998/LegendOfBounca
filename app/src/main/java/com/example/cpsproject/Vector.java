@@ -73,7 +73,7 @@ public class Vector {
     }
 
     public double getThetaIn2D() {
-        return Math.atan2(this.x, this.y);
+        return Math.atan2(this.y, this.x);
     }
 
     public static Vector fromAbsoluteValueIn2D(double value, double angle) {
