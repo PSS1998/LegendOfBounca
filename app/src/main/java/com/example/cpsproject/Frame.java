@@ -28,11 +28,11 @@ public class Frame implements Inclinable, Meshable {
     }
 
     public double getDistanceFromUpSide(Vector position) {
-        return this.height - position.getY();
+        return this.height;
     }
 
     public double getDistanceFromDownSide(Vector position) {
-        return position.getY();
+        return this.height - position.getY();
     }
 
     public double getDistanceFromRightSide(Vector position) {

@@ -26,8 +26,8 @@ public class GameManager extends Thread {
         Vector position = new Vector();
         position.setX((Math.random() / 2.5 + 0.20) * frame.getWidth());
         position.setY((Math.random() / 2.5 + 0.20) * frame.getHeight());
-        System.out.println(position);
-        Ball ball = new Ball("ball", 100, new Transform(position, Vector.nullVector()));
+//        System.out.println(position);
+        Ball ball = new Ball("ball", 200, new Transform(position, Vector.nullVector()));
         gameObjects.add(ball);
         ball.textBox = textBox;
         Room room = new Room("room", frame.getWidth(), frame.getHeight(), sensorListener);
@@ -40,13 +40,13 @@ public class GameManager extends Thread {
     public void run() {
         firstTime = System.nanoTime();
         String message = new String();
-        while(counter < 1000) {
+        while(counter < 5000) {
             try {
                 long currentTime = System.nanoTime();
                 if (lastUpdateTime == 0)
                     lastUpdateTime = currentTime;
                 double delta = currentTime - lastUpdateTime;
-                System.out.println(delta);
+//                System.out.println(delta);
                 if (delta / 1000000 > GameManager.DELTA_TIME) {
                     counter++;
                     for (GameObject gameObject : this.gameObjects)

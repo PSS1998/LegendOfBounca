@@ -14,12 +14,13 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final BallPainter painter;
     public TextView textBox;
     static int state = 0;
+    boolean stop = false;
 
     public Ball(String name, double radius, Transform transform) {
         super(name);
         this.radius = radius;
         this.transform = transform;
-        this.painter = new BallPainter();
+        this.painter = new BallPainter((float) radius);
     }
 
     public void addEnvironment(Room room) {
@@ -38,13 +39,14 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     public boolean hasCollision(Meshable object) {
-        if (object instanceof Room) {
+        if (object instanceof Frame) {
             Vector position = transform.getPosition();
-            Frame frame = ((Room) object).getFrame();
+            Frame frame = (Frame) object;
             double distanceFromUpSide = frame.getDistanceFromUpSide(position);
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
             return distanceFromDownSide < radius || distanceFromUpSide < radius || distanceFromRightSide < radius || distanceFromLeftSide < radius;
         }
         return false;
@@ -63,6 +65,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
 
     @Override
     void update(double deltaTime) {
+        if (stop)
+            return;
         Vector velocityChange = calculateTotalForce().multi(deltaTime);
         Vector updatedVelocity = velocityChange.add(this.transform.getVelocity());
         Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
@@ -70,13 +74,12 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         this.transform.setVelocity(updatedVelocity);
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
-                state++;
-                throw new Error("errore dige baba" + state + "\n");
+                stop = true;
 //                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, Collision.DOWN);
 //                this.transform.getVelocity().add(interaction);
 //                this.transform.getVelocity().multi(1);
             }
-        System.out.println(this.transform.getPosition());
+//        System.out.println(this.transform.getPosition());
         painter.draw(this.transform.getPosition());
     }
 
