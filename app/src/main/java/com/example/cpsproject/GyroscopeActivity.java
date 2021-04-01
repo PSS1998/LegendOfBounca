@@ -1,6 +1,7 @@
 package com.example.cpsproject;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class GyroscopeActivity extends AppCompatActivity {
     static private ImageView ball;
     static private LinearLayout frame;
     private TextView textBox;
-
+    public static int w, h, p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,10 @@ public class GyroscopeActivity extends AppCompatActivity {
         gyroscope = Gyroscope.getInstance(sensorManager);
         ball = (ImageView) findViewById(R.id.ball_object);
         frame = (LinearLayout) findViewById(R.id.frame_layout);
+        frame.setBackgroundColor(Color.YELLOW);
+
+
+
 
 
 //        frame = (LinearLayout)findViewById(R.id.frame_layout);
@@ -56,6 +61,19 @@ public class GyroscopeActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                View layout = findViewById(R.id.main_layout);
+                int layoutRight = layout.getRight();
+                int layoutBottom = layout.getBottom();
+
+                View floor = findViewById(R.id.floor);
+                int floorHeight = floor.getHeight();
+
+                int ceilingHeight = toolbar.getHeight();
+
+                w = layoutRight;
+                h = layoutBottom - floorHeight;
+                p = ceilingHeight;
+
                 gameManager.createGameObjects(textBox, gyroscope);
                 gameManager.start();
 

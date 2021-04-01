@@ -1,5 +1,7 @@
 package com.example.cpsproject;
 
+import android.view.View;
+
 public class Frame implements Inclinable, Meshable {
     private int width;
     private int height;
@@ -28,15 +30,16 @@ public class Frame implements Inclinable, Meshable {
     }
 
     public double getDistanceFromUpSide(Vector position) {
-        return this.height;
+        return position.getY() - GyroscopeActivity.p;
+//        return this.height;
     }
 
     public double getDistanceFromDownSide(Vector position) {
-        return this.height - position.getY();
+        return GyroscopeActivity.h - position.getY();
     }
 
     public double getDistanceFromRightSide(Vector position) {
-        return this.width - position.getX();
+        return GyroscopeActivity.w - position.getX();
     }
 
     public double getDistanceFromLeftSide(Vector position) {
