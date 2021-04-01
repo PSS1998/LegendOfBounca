@@ -14,11 +14,11 @@ public class Frame implements Inclinable, Meshable {
     }
 
     public int getWidth() {
-        return width;
+        return GyroscopeActivity.w;
     }
 
     public int getHeight() {
-        return height;
+        return GyroscopeActivity.h;
     }
 
     public void setWidth(int width) {
@@ -55,7 +55,7 @@ public class Frame implements Inclinable, Meshable {
     public Vector getVectorOfInteractionCollision(Transform transform, Collision collision) {
         double absoluteVelocity = transform.getVelocity().getAbsoluteValue();
         double velocityAngle = transform.getVelocity().getThetaIn2D();
-        float differenceAngle = (float)(velocityAngle - this.theta);
+        float differenceAngle = (float)(Math.PI / 2 - (velocityAngle - this.theta));
         return transform.getVelocity().multi(-1).rotate2D(differenceAngle);
 //        if (collision == Collision.DOWN)
 //            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta), theta + Math.PI / 2);

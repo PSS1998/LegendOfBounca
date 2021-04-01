@@ -7,6 +7,7 @@ public class PhysicsRules {
     public Vector calculateFreeFallForce(Weighable object, Inclinable inclinedSurface) {
         Vector accelerationGravity = new Vector(0, PhysicsConstants.g, 0);
         double weight = object.getWeight();
+//        System.out.println("theta: " + inclinedSurface.getTheta());
         return accelerationGravity.multi(weight).rotate2D((float)inclinedSurface.getTheta());
     }
 

@@ -21,6 +21,7 @@ import android.widget.TextView;
 public class GyroscopeActivity extends AppCompatActivity {
     private GameManager gameManager;
     private Gyroscope gyroscope;
+    private Gravity gravity;
 
     Button resetButton;
     Button randomButton;
@@ -42,7 +43,9 @@ public class GyroscopeActivity extends AppCompatActivity {
         randomButton = findViewById(R.id.gyroscope_random);
         textBox = findViewById(R.id.textGyroscope);
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        gravity = Gravity.getInstance(sensorManager);
         gyroscope = Gyroscope.getInstance(sensorManager);
+//                Gyroscope.getInstance(sensorManager);
         ball = (ImageView) findViewById(R.id.ball_object);
         frame = (LinearLayout) findViewById(R.id.frame_layout);
         frame.setBackgroundColor(Color.YELLOW);
@@ -75,9 +78,10 @@ public class GyroscopeActivity extends AppCompatActivity {
                     w = layoutRight;
                     h = layoutBottom - floorHeight;
                     p = ceilingHeight;
-                    gameManager.createGameObjects(textBox, gyroscope);
+                    gameManager.createGameObjects(textBox, gravity);
                     gameManager.start();
                     gyroscope.start();
+                    gravity.start();
                     resetButton.setText("Restart");
                     isStarted = true;
                 } else {

@@ -16,8 +16,8 @@ public class BallPainter {
 //        System.out.println("scale: " + this.scale);
 //        ball.setScaleX(this.scale);
 //        ball.setScaleY(this.scale);
-        System.out.println("ball width: " + ball.getWidth());
-        System.out.println("ball height: " + ball.getHeight());
+//        System.out.println("ball width: " + ball.getWidth());
+//        System.out.println("ball height: " + ball.getHeight());
     }
 
     public void draw(Vector position) {

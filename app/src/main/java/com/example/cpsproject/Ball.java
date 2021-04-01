@@ -50,7 +50,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
-            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
+//            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
             return distanceFromDownSide <= radius || distanceFromUpSide <= radius || distanceFromRightSide <= radius || distanceFromLeftSide <= radius;
         }
         return false;
@@ -70,7 +70,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 return Collision.UP;
             if (distanceFromRightSide <= radius)
                 return Collision.RIGHT;
-            return Collision.LEFT;
+            if (distanceFromLeftSide <= radius)
+                return Collision.LEFT;
         }
         return null;
     }
@@ -78,7 +79,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private Vector calculateTotalForce() {
         return physicsRules.calculateFreeFallForce(this, room.getFrame()) ;
 //        if (state == 0)
-//            return new Vector(0, 300, 0);
+//            return new Vector(0, 300, 0).multi(mass);
 //        else if (state == 1)
 //            return new Vector(250, 0, 0);
 //        else if (state == 2)
@@ -94,7 +95,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
         this.transform.move(displacement);
         this.transform.setVelocity(updatedVelocity);
-        System.out.println("velocity " + this.transform.getVelocity());
+//        System.out.println("velocity " + this.transform.getVelocity());
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
                 Collision collision = detectCollision(meshable);
@@ -102,9 +103,9 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 System.out.println("before collision" + this.transform.getVelocity());
                 Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, collision);
                 transform.setVelocity(interaction);
-                //Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, detectCollision(meshable));
-                System.out.println("interaction: " + interaction);
-                //this.transform.getVelocity().add(interaction);
+//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, detectCollision(meshable));
+//                System.out.println("interaction: " + interaction);
+//                this.transform.getVelocity().add(interaction);
                 this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));
                 System.out.println("after collision" + this.transform.getVelocity());
             }

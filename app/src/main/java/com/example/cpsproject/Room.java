@@ -35,6 +35,6 @@ public class Room extends GameObject implements FrictionalSurface {
 //        textBox.setText(new String("Iman update"));
 //                  .concat(String.valueOf(this.frame.getTheta())));
         this.frame.setTheta(sensorListener.getGradient());
-        System.out.println("THETA: " + this.frame.getTheta());
+//        System.out.println("THETA: " + this.frame.getTheta());
     }
 }
