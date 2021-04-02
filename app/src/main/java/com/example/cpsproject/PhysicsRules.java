@@ -33,6 +33,7 @@ public class PhysicsRules {
 
     private double calculateFrictionForceOnInclinedSurface(double normalForce, double motionForce, double staticFrictionConstant, double dynamicFrictionConstant) {
         double maximumStaticFrictionForce = Math.min(normalForce * staticFrictionConstant, motionForce);
+        System.out.println("max is : " + maximumStaticFrictionForce  + " motion force : " + motionForce) ;
         if (maximumStaticFrictionForce < motionForce)
             return normalForce * dynamicFrictionConstant;
         return maximumStaticFrictionForce;
@@ -44,13 +45,18 @@ public class PhysicsRules {
         return weight * PhysicsConstants.g * Math.sin(theta);
     }
 
-    public Vector calculateForceOnInclined(Weighable object, Inclinable inclinedSurface) {
+    public Vector calculateForceOnInclined(Weighable object, Inclinable inclinedSurface, float surfaceGradient) {
         double staticFriction = getStaticFrictionConstant(inclinedSurface);
         double dynamicFriction = getDynamicFrictionConstant(inclinedSurface);
-        double normalForce = calculateNormalForceOnInclinedSurface(object, inclinedSurface);
-        double motionForce = calculateMotionForceOnInclinedSurface(object, inclinedSurface);
-        double frictionForce = calculateFrictionForceOnInclinedSurface(normalForce, motionForce, staticFriction, dynamicFriction);
-        double totalForces = motionForce - frictionForce;
-        return Vector.fromAbsoluteValueIn2D(totalForces, inclinedSurface.getTheta());
+        double normalForce = Math.abs(calculateNormalForceOnInclinedSurface(object, inclinedSurface));
+        double motionForce = Math.abs(calculateMotionForceOnInclinedSurface(object, inclinedSurface));
+        double frictionForce = Math.abs(calculateFrictionForceOnInclinedSurface(normalForce, motionForce, staticFriction, dynamicFriction));
+        double totalForces = Math.max(motionForce - frictionForce , 0);
+        System.out.println("total force:" + totalForces + " motion:" + motionForce + " friction:" + frictionForce + " theta:" + inclinedSurface.getTheta());
+        if(Math.sin(inclinedSurface.getTheta()) > 0)
+            return Vector.fromAbsoluteValueIn2D(totalForces,surfaceGradient);
+        else
+            return Vector.fromAbsoluteValueIn2D(totalForces,surfaceGradient).multi(-1);
+//        return Vector.fromAbsoluteValueIn2D(totalForces, surfaceGradient * (Math.sin(inclinedSurface.getTheta()) > 0 ? 1: 0));
     }
 }

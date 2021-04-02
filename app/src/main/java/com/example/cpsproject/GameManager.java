@@ -70,12 +70,20 @@ public class GameManager extends Thread {
         System.out.println("frame height :"  + frame.getHeight() + " width:" + frame.getWidth());
         Vector position = new Vector();
         position.setX((0 / 3.5 + 0.30) * frame.getWidth());
-        position.setY((1) * frame.getHeight() - 150);
+        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
         this.ball.getTransform().setPosition(position);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getPosition());
     }
 
     public void setRandomBallVelocity() {
+        Vector velocity = new Vector();
+        velocity.setX(0);
+        velocity.setY(-(Math.random() * 100 + 20));
+        velocity = velocity.rotate2D((float)ball.getRoom().getFrame().getTheta());
+        this.ball.getTransform().setVelocity(velocity);
+        System.out.println("iman");
+        System.out.println(this.ball.getTransform().getVelocity());
+
     }
 }

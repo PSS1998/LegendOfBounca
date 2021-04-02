@@ -7,8 +7,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
-    private final static float DISSIPATION_COEFFICIENT = 0;
-    private double mass = 1;
+    private final static float DISSIPATION_COEFFICIENT = 0.1f;
+    private double mass = 10;
     private final Transform transform;
     private final double radius;
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
@@ -29,6 +29,10 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     public void addEnvironment(Room room) {
         this.room = room;
         environmentObjects.add(room.getFrame());
+    }
+
+    public Room getRoom () {
+        return room;
     }
 
     @Override
@@ -77,12 +81,37 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         return null;
     }
 
+    private float findCollisionSurfaceGradient(Collision collision) {
+        //Collision collision = Collision.UP;
+        switch (collision){
+            case UP:
+                return (float) -Math.PI;
+            case DOWN:
+                return (float) Math.PI;
+            case LEFT:
+                return (float) (Math.PI/2.0);
+            case RIGHT:
+                return (float) (-Math.PI/2.0);
+            default:
+                return 0;
+        }
+
+    }
+
     private Vector calculateTotalForce() {
-//        return physicsRules.calculateFreeFallForce(this, room.getFrame());
+        Collision collision = detectCollision(room.getFrame());
+        if (collision != null && !hasCollision(room.getFrame())) {
+            System.out.println("collision on :" + collision.name());
+            float surfaceGradient = findCollisionSurfaceGradient(collision);
+            return physicsRules.calculateForceOnInclined(this, room.getFrame(), surfaceGradient);
+        }
+        else
+            return physicsRules.calculateFreeFallForce(this, room.getFrame());
+
 //        if (state == 0)
 //            return new Vector(0, 300, 0).multi(mass);
 //        else if (state == 1)
-            return new Vector(250, 0, 0);
+//            return new Vector(250, 0, 0);
 //        else if (state == 2)
 //            return new Vector(0, -200, 0);
 //        return new Vector(-300, 0, 0);
@@ -96,7 +125,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         Vector displacement = Vector.add(updatedVelocity, this.transform.getVelocity()).div(2).multi(deltaTime);
         this.transform.move(displacement);
         this.transform.setVelocity(updatedVelocity);
-//        System.out.println("velocity " + this.transform.getVelocity());
+        System.out.println("velocityy" + this.transform.getVelocity());
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
                 Collision collision = detectCollision(meshable);
@@ -104,9 +133,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 System.out.println("before collision" + this.transform.getVelocity());
                 Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, collision);
                 transform.setVelocity(interaction);
-//                Vector interaction = meshable.getVectorOfInteractionCollision(this.transform, detectCollision(meshable));
-//                System.out.println("interaction: " + interaction);
-//                this.transform.getVelocity().add(interaction);
+
                 this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));
                 System.out.println("after collision" + this.transform.getVelocity());
             }

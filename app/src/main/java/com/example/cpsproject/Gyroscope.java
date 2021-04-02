@@ -28,7 +28,7 @@ public class Gyroscope extends GameSensorListener {
     }
 
     public double getGradient() {
-        return Math.PI / 4;
+        return gradient;
     }
 
     @Override
