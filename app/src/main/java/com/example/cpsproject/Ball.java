@@ -108,15 +108,17 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return (distanceFromDownSide <= radius && this.getTransform().getVelocity().getY() > 0) || (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < 0)  ||
-                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > 0) || (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < 0 );
+            return  (distanceFromDownSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT) ||
+                    (distanceFromUpSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT)  ||
+                    (distanceFromRightSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT) ||
+                    (distanceFromLeftSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT);
         }
         return false;
     }
 
     private Vector calculateTotalForce() {
         Collision collision = detectCollision(room.getFrame());
-        if (collision != null && !hasCollision(room.getFrame())) {
+        if (isRolling(this.room.getFrame())) {
             System.out.println("rolling on :" + collision.name());
             float surfaceGradient = findCollisionSurfaceGradient(collision);
             return physicsRules.calculateForceOnInclined(this, room.getFrame(), surfaceGradient);

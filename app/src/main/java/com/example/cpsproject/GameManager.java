@@ -70,21 +70,25 @@ public class GameManager extends Thread {
         System.out.println("frame height :"  + frame.getHeight() + " width:" + frame.getWidth());
         Vector position = new Vector();
         position.setX((1 / 3.5 + 0.357) * GyroscopeActivity.w);
-        position.setY(( 1 / 3.5 + 0.357) * (GyroscopeActivity.h - GyroscopeActivity.p) + GyroscopeActivity.p);
+//        position.setY(( 1 / 3.5 + 0.357) * (GyroscopeActivity.h - GyroscopeActivity.p) + GyroscopeActivity.p);
+
+        position.setY((1) * (GyroscopeActivity.h - GyroscopeActivity.p) + GyroscopeActivity.p - 150);
         this.ball.getTransform().setPosition(position);
-        System.out.println("iman");
-        System.out.println(this.ball.getTransform().getPosition());
         this.ball.getTransform().setVelocity(new Vector(0,0,0));
     }
 
     public void setRandomBallVelocity() {
         Vector velocity = new Vector();
         velocity.setX(0);
-        velocity.setY(-(Math.random() * 100 + 20));
+        velocity.setY(-(Math.random() * 500 + 20));
         velocity = velocity.rotate2D((float)ball.getRoom().getFrame().getTheta());
         this.ball.getTransform().setVelocity(velocity);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getVelocity());
 
+    }
+
+    public void stopGame() {
+        this.gameObjects.clear();
     }
 }

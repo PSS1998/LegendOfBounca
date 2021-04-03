@@ -103,6 +103,7 @@ public class GyroscopeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         gyroscope.stop();
+        gameManager.stopGame();
         super.onStop();
     }
 
