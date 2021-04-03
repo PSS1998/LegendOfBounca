@@ -23,9 +23,9 @@ public class GravityActivity extends AppCompatActivity {
     public double MU_K = .07;
 
     private int SPEED_MULTIPLIER_CONSTANT = 1;
-    private int ACCELERATION_MULTIPLIER_CONSTANT = 5;
+    private int ACCELERATION_MULTIPLIER_CONSTANT = 1;
     private float SPEED_THRESHOLD_TO_STOP = 10*ACCELERATION_MULTIPLIER_CONSTANT;
-    private float SPEED_THRESHOLD_TO_IGNORE = 2*ACCELERATION_MULTIPLIER_CONSTANT;
+    private float SPEED_THRESHOLD_TO_IGNORE = 0.1*ACCELERATION_MULTIPLIER_CONSTANT;
 
     private float NS2US = 1.0f / 1000.0f; // ns to microsecond
     private float US2S = 1.0f / 1000000.0f; // microsecond to second
