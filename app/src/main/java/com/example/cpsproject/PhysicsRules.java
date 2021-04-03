@@ -59,4 +59,12 @@ public class PhysicsRules {
             return Vector.fromAbsoluteValueIn2D(totalForces,surfaceGradient).multi(-1);
 //        return Vector.fromAbsoluteValueIn2D(totalForces, surfaceGradient * (Math.sin(inclinedSurface.getTheta()) > 0 ? 1: 0));
     }
+
+    public Vector calculateKineticEnergy(Weighable object) {
+        if (object instanceof Movable) {
+            Vector velocity = ((Movable) object).getVelocity();
+            return Vector.multi(velocity, velocity).multi(0.5).multi(object.getWeight());
+        }
+        return Vector.nullVector();
+    }
 }

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final static float DISSIPATION_COEFFICIENT = 0.1f;
-    private final static float EPSILON_COEFFICIENT = 0.1f;
-    private double mass = 10;
+    private final static float EPSILON_COEFFICIENT = 10.0f;
+    private double mass = 0.01;
     private final Transform transform;
     private final double radius;
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
@@ -37,6 +37,11 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     }
 
     @Override
+    public Vector getVelocity() {
+        return this.transform.getVelocity();
+    }
+
+    @Override
     public double getWeight() {
         return this.mass;
     }
@@ -56,8 +61,10 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return (distanceFromDownSide <= radius  && this.getTransform().getVelocity().getY() > 0) || (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < 0)  ||
-                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > 0) || (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < 0 );
+            return (distanceFromDownSide <= radius  && this.getTransform().getVelocity().getY() > 0) ||
+                    (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < 0)  ||
+                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > 0) ||
+                    (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < 0 );
         }
         return false;
     }
@@ -117,8 +124,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     }
 
     private Vector calculateTotalForce() {
-        Collision collision = detectCollision(room.getFrame());
         if (isRolling(this.room.getFrame())) {
+            Collision collision = detectCollision(room.getFrame());
             System.out.println("rolling on :" + collision.name());
             float surfaceGradient = findCollisionSurfaceGradient(collision);
             return physicsRules.calculateForceOnInclined(this, room.getFrame(), surfaceGradient);
@@ -154,6 +161,8 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 transform.setVelocity(interaction);
 
                 this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));
+                if (physicsRules.calculateKineticEnergy(this).getAbsoluteValue() < EPSILON_COEFFICIENT)
+                    this.transform.setVelocity(Vector.nullVector());
                 System.out.println("after collision" + this.transform.getVelocity() + "value:"  + (Math.pow(beforeVelocity.getAbsoluteValue(),2) - Math.pow(this.transform.getVelocity().getAbsoluteValue(),2))* mass);
             }
         painter.draw(this.transform.getPosition());

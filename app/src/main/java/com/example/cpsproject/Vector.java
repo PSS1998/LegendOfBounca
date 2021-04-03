@@ -93,4 +93,8 @@ public class Vector {
     public static Vector nullVector() {
         return new Vector();
     }
+
+    public static Vector multi(Vector firstVector, Vector secondVector) {
+        return new Vector(firstVector.x * secondVector.x, firstVector.y * secondVector.y, firstVector.z * secondVector.z);
+    }
 }
