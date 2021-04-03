@@ -16,6 +16,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final ArrayList<Meshable> environmentObjects = new ArrayList<>();
     private final BallPainter painter;
     public TextView textBox;
+    private Collision rollingOn;
     static int state = 0;
     boolean stop = false;
     private Room room;
@@ -61,6 +62,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
             return (distanceFromDownSide <= radius  && this.getTransform().getVelocity().getY() > IGNORED_VELOCITY) ||
                     (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < -IGNORED_VELOCITY)  ||
@@ -78,20 +80,19 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
-            if (distanceFromDownSide <= radius)
+            if (distanceFromDownSide < radius)
                 return Collision.DOWN;
-            if (distanceFromUpSide <= radius)
+            if (distanceFromUpSide < radius)
                 return Collision.UP;
-            if (distanceFromRightSide <= radius)
+            if (distanceFromRightSide < radius)
                 return Collision.RIGHT;
-            if (distanceFromLeftSide <= radius)
+            if (distanceFromLeftSide < radius)
                 return Collision.LEFT;
         }
         return null;
     }
 
     private float findCollisionSurfaceGradient(Collision collision) {
-        //Collision collision = Collision.UP;
         switch (collision){
             case UP:
                 return (float) -Math.PI;
@@ -104,7 +105,6 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             default:
                 return 0;
         }
-
     }
 
     private boolean isRolling (Meshable object) {
@@ -115,33 +115,46 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromRightSide = frame.getDistanceFromRightSide(position);
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+            double theta = this.getRoom().getFrame().getTheta();
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return  (distanceFromDownSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT) ||
-                    (distanceFromUpSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT)  ||
-                    (distanceFromRightSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT) ||
-                    (distanceFromLeftSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT);
+            return (distanceFromDownSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT && Math.cos(theta) > 0 ) ||
+                    (distanceFromUpSide <= radius && Math.abs(this.getTransform().getVelocity().getY()) < EPSILON_COEFFICIENT && Math.cos(theta + Math.PI) > 0) ||
+                    (distanceFromRightSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT && Math.cos(theta - Math.PI/2) > 0) ||
+                    (distanceFromLeftSide <= radius && Math.abs(this.getTransform().getVelocity().getX()) < EPSILON_COEFFICIENT && Math.cos(theta + Math.PI/2) > 0);
         }
         return false;
     }
 
+    private void detectRolling (Meshable object) {
+        if (object instanceof Frame) {
+            Vector position = transform.getPosition();
+            Frame frame = (Frame) object;
+            double distanceFromUpSide = frame.getDistanceFromUpSide(position);
+            double distanceFromRightSide = frame.getDistanceFromRightSide(position);
+            double distanceFromDownSide = frame.getDistanceFromDownSide(position);
+            double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
+            System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
+            double theta = this.getRoom().getFrame().getTheta();
+            if (distanceFromDownSide <= radius && this.getTransform().getVelocity().getY() == 0 && Math.cos(theta) > 0)
+                this.rollingOn = Collision.DOWN;
+            else if (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() == 0 && Math.cos(theta + Math.PI) > 0)
+                this.rollingOn = Collision.UP;
+            else if (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() == 0 && Math.cos(theta - Math.PI/2) > 0)
+                this.rollingOn = Collision.RIGHT;
+            else if (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() == 0 && Math.cos(theta + Math.PI/2) > 0)
+                this.rollingOn = Collision.LEFT;
+        }
+    }
+
     private Vector calculateTotalForce() {
-        if (isRolling(this.room.getFrame())) {
-            Collision collision = detectCollision(room.getFrame());
-            System.out.println("rolling on :" + collision.name());
-            float surfaceGradient = findCollisionSurfaceGradient(collision);
+        detectRolling(this.room.getFrame());
+        if (this.rollingOn != null) {
+            float surfaceGradient = findCollisionSurfaceGradient(this.rollingOn);
+            this.rollingOn = null;
             return physicsRules.calculateForceOnInclined(this, room.getFrame(), surfaceGradient);
         }
         else
             return physicsRules.calculateFreeFallForce(this, room.getFrame());
-
-//        if (state == 0)
-//            return new Vector(0, 300, 0).multi(mass);
-//        else if (state == 1)
-//            return new Vector(250, 0, 0);
-//        else if (state == 2)
-//            return new Vector(0, -200, 0);
-//        return new Vector(-300, 0, 0);
-//        return Vector.nullVector();
     }
 
     @Override
@@ -155,6 +168,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
         for (Meshable meshable: environmentObjects)
             if (this.hasCollision(meshable)) {
                 Collision collision = detectCollision(meshable);
+                System.out.println("collision name: " + collision.name());
                 handleCollision(collision);
                 System.out.println("before collision" + this.transform.getVelocity());
                 Vector beforeVelocity = this.getTransform().getVelocity();
@@ -166,6 +180,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                     this.transform.setVelocity(Vector.nullVector());
                 System.out.println("after collision" + this.transform.getVelocity() + "value:"  + (Math.pow(beforeVelocity.getAbsoluteValue(),2) - Math.pow(this.transform.getVelocity().getAbsoluteValue(),2))* mass);
             }
+        this.rollingOn = null;
         painter.draw(this.transform.getPosition());
     }
 
