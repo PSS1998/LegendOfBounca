@@ -5,20 +5,26 @@ import android.view.View;
 public class Frame implements Inclinable, Meshable {
     private int width;
     private int height;
+    private int top;
     private double theta;
 
-    public Frame(int width, int height) {
+    public Frame(int width, int height, int top) {
         this.width = width;
         this.height = height;
+        this.top = top;
         this.theta = 0;
     }
 
     public int getWidth() {
-        return GyroscopeActivity.w;
+        return this.width;
     }
 
     public int getHeight() {
-        return GyroscopeActivity.h;
+        return this.height;
+    }
+
+    public int getTop() {
+        return this.top;
     }
 
     public void setWidth(int width) {
@@ -47,22 +53,16 @@ public class Frame implements Inclinable, Meshable {
     }
 
     @Override
-    public boolean hasCollision(Meshable object) {
-        return false;
+    public void detectCollision(Meshable object) {
     }
 
     @Override
     public Vector getVectorOfInteractionCollision(Transform transform, Collision collision) {
-
         if (collision == Collision.DOWN || collision == Collision.UP)
             return new Vector(transform.getVelocity().getX(), -transform.getVelocity().getY(), 0);
-//        if (collision == Collision.UP)
-//            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI), theta + Math.PI * 1.5);
         if (collision == Collision.RIGHT || collision == Collision.LEFT)
             return new Vector(-transform.getVelocity().getX(), transform.getVelocity().getY(), 0);
-//        if (collision == Collision.LEFT)
-//            return Vector.fromAbsoluteValueIn2D(-2 * absoluteVelocity * Math.sin(velocityAngle - this.theta - Math.PI / 2), theta + Math.PI);
-        return new Vector();
+        return Vector.nullVector();
     }
 
     @Override

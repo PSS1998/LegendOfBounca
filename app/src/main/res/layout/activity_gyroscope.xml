@@ -7,16 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".GyroscopeActivity">
 
-    <LinearLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="618dp"
-        android:layout_marginBottom="52dp"
-        app:layout_anchor="@+id/constraintLayout"
-        app:layout_anchorGravity="center">
-
-    </LinearLayout>
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,32 +64,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textGyroscope"
-            android:layout_width="227dp"
-            android:layout_height="131dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.451"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.91" />
-
         <ImageView
             android:id="@+id/ball_object"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="282dp"
-            android:layout_marginEnd="281dp"
-            android:layout_marginBottom="556dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/textGyroscope"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/soccer_ball" />
-
+            android:visibility="invisible"
+            app:srcCompat="@drawable/soccer_ball"
+            tools:layout_editor_absoluteX="54dp"
+            tools:layout_editor_absoluteY="313dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
