@@ -69,11 +69,12 @@ public class GameManager extends Thread {
     public void setRandomBallPosition() {
         System.out.println("frame height :"  + frame.getHeight() + " width:" + frame.getWidth());
         Vector position = new Vector();
-        position.setX((0 / 3.5 + 0.30) * frame.getWidth());
-        position.setY((Math.random() / 3.5 + 0.30) * frame.getHeight());
+        position.setX((1 / 3.5 + 0.357) * GyroscopeActivity.w);
+        position.setY(( 1 / 3.5 + 0.357) * (GyroscopeActivity.h - GyroscopeActivity.p) + GyroscopeActivity.p);
         this.ball.getTransform().setPosition(position);
         System.out.println("iman");
         System.out.println(this.ball.getTransform().getPosition());
+        this.ball.getTransform().setVelocity(new Vector(0,0,0));
     }
 
     public void setRandomBallVelocity() {

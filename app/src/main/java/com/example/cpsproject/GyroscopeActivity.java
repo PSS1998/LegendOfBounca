@@ -78,6 +78,7 @@ public class GyroscopeActivity extends AppCompatActivity {
                     w = layoutRight;
                     h = layoutBottom - floorHeight;
                     p = ceilingHeight;
+                    System.out.println("frame size:" + w + "h:" + h + "p:" + p);
                     gameManager.createGameObjects(textBox, gyroscope);
                     gameManager.start();
                     gyroscope.start();
