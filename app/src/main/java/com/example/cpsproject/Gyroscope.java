@@ -3,6 +3,7 @@ package com.example.cpsproject;
 import android.hardware.SensorManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.os.Trace;
 
 public class Gyroscope extends GameSensorListener {
     private double velocityZ;
@@ -38,7 +39,10 @@ public class Gyroscope extends GameSensorListener {
                 timestamp = event.timestamp;
             double alpha = 0.8;
             final double dT = (event.timestamp - timestamp) * NS2S;
-            velocityZ = alpha * velocityZ + (1 - alpha) * event.values[2];
+            Trace.beginSection("read-gyroscope-sensor");
+            float eventValue = event.values[2];
+            Trace.endSection();
+            velocityZ = alpha * velocityZ + (1 - alpha) * eventValue;
             gradient += velocityZ * dT;
             timestamp = event.timestamp;
             System.out.println("gradient: " + gradient);
