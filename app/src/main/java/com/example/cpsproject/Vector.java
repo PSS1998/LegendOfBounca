@@ -3,6 +3,7 @@ package com.example.cpsproject;
 import androidx.annotation.NonNull;
 
 public class Vector {
+    private static final float ROUND_THRESHOLD = 0.00001f;
     private double x;
     private double y;
     private double z;
@@ -96,5 +97,12 @@ public class Vector {
 
     public static Vector multi(Vector firstVector, Vector secondVector) {
         return new Vector(firstVector.x * secondVector.x, firstVector.y * secondVector.y, firstVector.z * secondVector.z);
+    }
+
+    public Vector round() {
+        this.x = Math.abs(this.x) > ROUND_THRESHOLD ? this.x : 0;
+        this.y = Math.abs(this.y) > ROUND_THRESHOLD ? this.y : 0;
+        this.z = Math.abs(this.z) > ROUND_THRESHOLD ? this.z : 0;
+        return this;
     }
 }

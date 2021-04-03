@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Ball extends GameObject implements Weighable, Meshable, Movable {
     private final static float DISSIPATION_COEFFICIENT = 0.1f;
     private final static float EPSILON_COEFFICIENT = 10.0f;
+    private final static float IGNORED_VELOCITY = 0.001f;
     private double mass = 0.01;
     private final Transform transform;
     private final double radius;
@@ -61,10 +62,10 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
             double distanceFromDownSide = frame.getDistanceFromDownSide(position);
             double distanceFromLeftSide = frame.getDistanceFromLeftSide(position);
             System.out.println(distanceFromDownSide + " % " + distanceFromUpSide + " % " + distanceFromLeftSide + " % " + distanceFromRightSide);
-            return (distanceFromDownSide <= radius  && this.getTransform().getVelocity().getY() > 0) ||
-                    (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < 0)  ||
-                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > 0) ||
-                    (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < 0 );
+            return (distanceFromDownSide <= radius  && this.getTransform().getVelocity().getY() > IGNORED_VELOCITY) ||
+                    (distanceFromUpSide <= radius && this.getTransform().getVelocity().getY() < -IGNORED_VELOCITY)  ||
+                    (distanceFromRightSide <= radius && this.getTransform().getVelocity().getX() > IGNORED_VELOCITY) ||
+                    (distanceFromLeftSide <= radius && this.getTransform().getVelocity().getX() < -IGNORED_VELOCITY);
         }
         return false;
     }
@@ -161,7 +162,7 @@ public class Ball extends GameObject implements Weighable, Meshable, Movable {
                 transform.setVelocity(interaction);
 
                 this.transform.getVelocity().multi(Math.sqrt(1 - DISSIPATION_COEFFICIENT));
-                if (physicsRules.calculateKineticEnergy(this).getAbsoluteValue() < EPSILON_COEFFICIENT)
+                if (physicsRules.calculateKineticEnergy(this) < EPSILON_COEFFICIENT)
                     this.transform.setVelocity(Vector.nullVector());
                 System.out.println("after collision" + this.transform.getVelocity() + "value:"  + (Math.pow(beforeVelocity.getAbsoluteValue(),2) - Math.pow(this.transform.getVelocity().getAbsoluteValue(),2))* mass);
             }
