@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.util.Random;
@@ -57,6 +58,8 @@ public class GravityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gravity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         this.movingObject = findViewById(R.id.movingObject);
 
@@ -207,14 +210,14 @@ public class GravityActivity extends AppCompatActivity {
                 if (Math.abs(gravityY) > Math.abs(gravityX * MU_S)) {
                     newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_S);
                     fx = (gravityY > 0) ? newGravityY : -newGravityY;
-//                        System.out.println("Static Friction: fy: " + fy + "; gravityX: " + gravityX);
+//                        System.out.println("Static Friction: fx: " + fx + "; gravityY: " + gravityY + "; gravityX: " + gravityX);
                 } else
                     fx = 0;
             } else {
                 if (Math.abs(gravityY) > Math.abs(gravityX * MU_K)) {
                     newGravityY = Math.abs(gravityY) - Math.abs(gravityX * MU_K);
                     fx = (gravityY > 0) ? newGravityY : -newGravityY;
-//                        System.out.println("Dynamic Friction: fy: " + fy + "; gravityX: " + gravityX);
+//                        System.out.println("Dynamic Friction: fx: " + fx + "; gravityY: " + gravityY + "; gravityX: " + gravityX);
                 } else
                     fx = 0;
             }
