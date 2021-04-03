@@ -23,7 +23,7 @@
         app:popupTheme="@style/Theme.CpsProject.PopupOverlay" />
 
     <ImageView
-        android:id="@+id/movingObject"
+        android:id="@+id/ball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
